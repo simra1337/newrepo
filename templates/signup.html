@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>Signup page</title>
+    </head>
+    <body>
+        <form method="POST">
+            {%csrf_token%}
+            <label>First name:</label>
+            <input type="text" name="fname"><br>
+            <label>Last name:</label>
+            <input type="text" name="lname"><br>
+            <label>Email name:</label>
+            <input type="text" name="email"><br>
+            <label>Phone:</label>
+            <input type="text" name="phone"><br>
+            <label>Password:</label>
+            <input type="text" name="password"><br>
+            <label>Confirm Password:</label>
+            <input type="text" name="cpassword"><br>
+            <input type="submit" value="Proceed">
+        </form>
+    </body>
+</html>
