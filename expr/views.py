@@ -1,5 +1,5 @@
 import re
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 from expr import models
 from expr.models import Users
 from expr.forms import UsersForm
@@ -11,19 +11,23 @@ def home(request):
 
 def register(request):
     if request.method == 'POST':
-        form = UsersForm(data = request.POST)
+        form = UsersForm(request.POST)
+        data = request.POST
+        error_message = ""
         # process form data
         if form.is_valid():
-            obj = Users() #gets new object
-            print()
-            obj.fname = form.cleaned_data['fname']
-            obj.lname = form.cleaned_data['lname']
-            obj.phone = form.cleaned_data['phone']
-            obj.email = form.cleaned_data['email']
-            obj.password = form.cleaned_data['password']
-            obj.save()
-            return render(request, 'index.html')
-    return render(request, 'signup.html')
+            if data.get('cpassword')!=form.cleaned_data.get('password'):
+                error_message = "Passwords do not match"
+                return render(request, 'signup.html', {'error' : error_message, 'form': form})
+            else:
+                post = form.save(commit = False)
+                post.save() 
+                return HttpResponse("data submitted successfully")
+        else:
+            return render(request, "signup.html", {'form':form}) 
+    else:
+        form = UsersForm(None)
+        return render(request, 'signup.html', {'form':form})
 
 def login(request):
     return render(request, 'index.html')
